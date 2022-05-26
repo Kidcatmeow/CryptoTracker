@@ -10,13 +10,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.model.StreamEncoder
-import com.caverock.androidsvg.SVG
 import com.example.cryptotracker.R
 import com.example.cryptotracker.data.model.Coin
 import kotlinx.android.synthetic.main.activity_main.*
