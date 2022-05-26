@@ -3,12 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/workspace/CryptoTracker/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.36153846153846153" />
         <entry key="..\:/workspace/CryptoTracker/app/src/main/res/drawable/customborder.xml" value="0.3828125" />
+        <entry key="..\:/workspace/CryptoTracker/app/src/main/res/drawable/ic_launcher_background.xml" value="0.36153846153846153" />
         <entry key="..\:/workspace/CryptoTracker/app/src/main/res/layout/activity_main.xml" value="0.35260416666666666" />
         <entry key="..\:/workspace/CryptoTracker/app/src/main/res/layout/rvcoin_layout.xml" value="0.5" />
         <entry key="..\:/workspace/CryptoTracker/app/src/main/res/layout/rvcoin_layout2.xml" value="0.36666666666666664" />
-        <entry key="..\:/workspace/CryptoTracker/app/src/main/res/layout/rvcoin_viewholder_left.xml" value="0.25" />
-        <entry key="..\:/workspace/CryptoTracker/app/src/main/res/layout/rvcoin_viewholder_right.xml" value="0.5" />
+        <entry key="..\:/workspace/CryptoTracker/app/src/main/res/layout/rvcoin_viewholder_left.xml" value="0.33" />
+        <entry key="..\:/workspace/CryptoTracker/app/src/main/res/layout/rvcoin_viewholder_right.xml" value="0.33" />
       </map>
     </option>
   </component>
