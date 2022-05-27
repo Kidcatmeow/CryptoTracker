@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
@@ -16,6 +17,7 @@ import com.android.volley.toolbox.Volley
 import com.example.cryptotracker.R
 import com.example.cryptotracker.data.model.Coin
 import com.example.cryptotracker.data.remote.VolleySingleton
+import com.example.cryptotracker.ui.adapter.RVAdapter
 import kotlin.collections.ArrayList
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -32,16 +34,34 @@ class MainActivity : AppCompatActivity() {
         rvCoinList.setHasFixedSize(true)
         rvCoinList.layoutManager = LinearLayoutManager(this)
 
-        for (i in 0 until list.size){
-            if ((i % 5 == 0) || (i != 0)) {
-                val adapterRight = CoinRVAdapterRight(this, list)
-                rvCoinList.adapter = adapterRight
-            } else {
-                val adapterLeft = CoinRVAdapterLeft(this, list)
-                rvCoinList.adapter = adapterLeft
+//        val adapterLeft = CoinRVAdapterLeft(this, list)
+//        val adapterRight = CoinRVAdapterRight(this, list)
+//        val concatAdapter = ConcatAdapter(adapterLeft,adapterRight)
+//        rvCoinList.adapter = concatAdapter
 
-            }
-        }
+        val adapterLeft = RVAdapter(this, list)
+        rvCoinList.adapter = adapterLeft
+
+//        var rvCoinList.findViewHolderForAdapterPosition() = n
+
+
+//        for (i in 0 until list.toString().length){
+//
+//            if ((i % 5 == 0) || (i != 0)) {
+//                val adapterRight = CoinRVAdapterRight(this, list)
+//                rvCoinList.adapter = adapterRight
+//            } else if ((i % 5 != 0) || (i == 0)) {
+//                val adapterLeft = CoinRVAdapterLeft(this, list)
+//                rvCoinList.adapter = adapterLeft
+//
+//            }
+//
+//        }
+//        Log.i("Khing",list.size.toString())
+
+        val adapter = RVAdapter(this,list)
+        rvCoinList.adapter = adapter
+
 
 
     }
@@ -50,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             val url = "https://api.coinranking.com/v2/coins"
             val request = JsonObjectRequest(
                 Request.Method.GET, url, null,
-                { response ->
+                    { response ->
                     val data = response.getJSONObject("data")
                     val data_coin = data.getJSONArray("coins")
                     //coins --> Object[BTC,ETH,BNB,USDT]
