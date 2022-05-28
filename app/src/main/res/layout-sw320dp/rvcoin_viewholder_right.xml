@@ -10,20 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/imageView_coinImageLeft"
-            android:layout_width="300dp"
-            android:layout_height="90dp"
-            android:layout_gravity="center|left"
-            android:layout_margin="10dp"
-            android:layout_weight="2"
-            android:padding="10dp"
-            tools:srcCompat="@tools:sample/avatars" />
+        android:weightSum="3">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -33,15 +20,15 @@
             android:weightSum="2">
 
             <TextView
-                android:id="@+id/textView_coinNameLeft"
+                android:id="@+id/textView_coinNameRight"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:gravity="center|left"
+                android:gravity="center|right"
                 android:text="TextView"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -50,27 +37,39 @@
                 app:layout_constraintVertical_bias="0.192" />
 
             <TextView
-                android:id="@+id/textView_coinAbbreviationLeft"
+                android:id="@+id/textView_coinUrlRight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:gravity="center|left"
+                android:gravity="center|right"
                 android:text="TextView"
+                android:textAlignment="textEnd"
                 android:textColor="#808B96"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.526"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.794" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/imageView_coinImageRight"
+            android:layout_width="300dp"
+            android:layout_height="90dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="2"
+            android:padding="10dp"
+            tools:srcCompat="@tools:sample/avatars" />
 
     </LinearLayout>
 
     <View
-        android:id="@+id/divider2"
+        android:id="@+id/divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />

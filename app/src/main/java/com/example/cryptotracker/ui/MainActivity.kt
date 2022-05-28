@@ -1,76 +1,42 @@
 package com.example.cryptotracker.ui
 
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
-import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
 import com.example.cryptotracker.R
 import com.example.cryptotracker.data.model.Coin
 import com.example.cryptotracker.data.remote.VolleySingleton
-import com.example.cryptotracker.ui.adapter.RVAdapter
-import kotlin.collections.ArrayList
+import com.example.cryptotracker.ui.adapter.rvCoinAdapter
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kotlin.collections.ArrayList
+
 
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        callVolley()
-        val rvCoinList = findViewById<View>(R.id.rvCoinList) as RecyclerView
-        rvCoinList.setHasFixedSize(true)
-        rvCoinList.layoutManager = LinearLayoutManager(this)
-
-//        val adapterLeft = CoinRVAdapterLeft(this, list)
-//        val adapterRight = CoinRVAdapterRight(this, list)
-//        val concatAdapter = ConcatAdapter(adapterLeft,adapterRight)
-//        rvCoinList.adapter = concatAdapter
-
-        val adapterLeft = RVAdapter(this, list)
-        rvCoinList.adapter = adapterLeft
-
-//        var rvCoinList.findViewHolderForAdapterPosition() = n
-
-
-//        for (i in 0 until list.toString().length){
-//
-//            if ((i % 5 == 0) || (i != 0)) {
-//                val adapterRight = CoinRVAdapterRight(this, list)
-//                rvCoinList.adapter = adapterRight
-//            } else if ((i % 5 != 0) || (i == 0)) {
-//                val adapterLeft = CoinRVAdapterLeft(this, list)
-//                rvCoinList.adapter = adapterLeft
-//
-//            }
-//
-//        }
-//        Log.i("Khing",list.size.toString())
-
-        val adapter = RVAdapter(this,list)
-        rvCoinList.adapter = adapter
-
-
-
-    }
-    val list = ArrayList<Coin>()
-    fun callVolley() {
+        val list = ArrayList<Coin>()
+        fun callVolley(context:Context) {
             val url = "https://api.coinranking.com/v2/coins"
             val request = JsonObjectRequest(
                 Request.Method.GET, url, null,
-                    { response ->
+                { response ->
                     val data = response.getJSONObject("data")
                     val data_coin = data.getJSONArray("coins")
                     //coins --> Object[BTC,ETH,BNB,USDT]
@@ -95,12 +61,37 @@ class MainActivity : AppCompatActivity() {
                 },
                 { error ->
                     Log.i("LOLActivity", error.toString())
-                    Toast.makeText(applicationContext, "Something went wrong!!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Something went wrong!!", Toast.LENGTH_SHORT).show()
                 })
             request.retryPolicy=DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,0,1f)
-            VolleySingleton.getInstance(applicationContext).addToRequestQueue(request)
+            VolleySingleton.getInstance(context).addToRequestQueue(request)
+        }
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+
+
+
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        val rvCoinList = findViewById<View>(R.id.rvCoinList) as RecyclerView
+        rvCoinList.setHasFixedSize(true)
+        rvCoinList.layoutManager = LinearLayoutManager(this)
+        val adapter = rvCoinAdapter(this,list){
+            coin->
+             //this 'coin' is simply list[it] from onCoinClicked
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(coin.coinrankingUrl))
+                startActivity(intent)
+
+        }
+        rvCoinList.adapter = adapter
+
+
+
+
+    }
+    
 
 
 }

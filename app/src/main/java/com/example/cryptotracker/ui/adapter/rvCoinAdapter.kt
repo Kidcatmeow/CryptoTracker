@@ -12,9 +12,13 @@ import com.example.cryptotracker.data.model.Coin
 
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideApp
 import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
+import androidx.core.content.ContextCompat.startActivity
+
+import android.content.Intent
+import androidx.core.content.ContextCompat
 
 
-class RVAdapter(val context: Activity, val list:ArrayList<Coin>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class rvCoinAdapter(val context: Activity, val list:ArrayList<Coin>,var onCoinClicked : (Coin)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     //STEP: 2
     //we check which ItemViewType was passed by function 'getItemViewType'
@@ -24,8 +28,13 @@ class RVAdapter(val context: Activity, val list:ArrayList<Coin>) : RecyclerView.
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
 
+
+
         return when (viewType) {
-            R.layout.rvcoin_viewholder_right -> ViewHolderRight(inflater.inflate(viewType, parent, false))
+            R.layout.rvcoin_viewholder_right -> ViewHolderRight(inflater.inflate(viewType, parent, false),{positionOfCoin->
+                onCoinClicked(list[positionOfCoin])
+            })
+
 
             R.layout.rvcoin_viewholder_left -> ViewHolderLeft(inflater.inflate(viewType, parent, false))
 
@@ -73,6 +82,7 @@ class RVAdapter(val context: Activity, val list:ArrayList<Coin>) : RecyclerView.
             }
 
         }
+
     }
 
 
@@ -102,20 +112,36 @@ class RVAdapter(val context: Activity, val list:ArrayList<Coin>) : RecyclerView.
     }
 
     class ViewHolderLeft(view: View) : RecyclerView.ViewHolder(view){
-        val tvName = itemView.findViewById<TextView>(R.id.textView_coinNameLeft)
-        val ImageView1 = itemView.findViewById<ImageView>(R.id.imageView_coinImageLeft)
-        val ImageView = itemView.findViewById<ImageView>(R.id.imageView_coinImageLeft)
-        val tvSymbol = itemView.findViewById<TextView>(R.id.textView_coinAbbreviationLeft)
+        val tvName = view.findViewById<TextView>(R.id.textView_coinNameLeft)
+        val ImageView1 = view.findViewById<ImageView>(R.id.imageView_coinImageLeft)
+        val ImageView = view.findViewById<ImageView>(R.id.imageView_coinImageLeft)
+        val tvSymbol = view.findViewById<TextView>(R.id.textView_coinAbbreviationLeft)
 
     }
 
-    class ViewHolderRight(view: View) : RecyclerView.ViewHolder(view){
+    class ViewHolderRight(view: View,onItemClicked_fun:(Int)->Unit) : RecyclerView.ViewHolder(view){
+        val tvName = view.findViewById<TextView>(R.id.textView_coinNameRight)
+        val ImageView1 = view.findViewById<ImageView>(R.id.imageView_coinImageRight)
+        val ImageView = view.findViewById<ImageView>(R.id.imageView_coinImageRight)
+        val tvUrl = view.findViewById<TextView>(R.id.textView_coinUrlRight)
 
-        val tvName = itemView.findViewById<TextView>(R.id.textView_coinNameRight)
-        val ImageView1 = itemView.findViewById<ImageView>(R.id.imageView_coinImageRight)
-        val ImageView = itemView.findViewById<ImageView>(R.id.imageView_coinImageRight)
-        val tvUrl = itemView.findViewById<TextView>(R.id.textView_coinUrlRight)
+        //it passes adapterposition as an argument to be used later on
+        //adapterposition will be saved as parameter when we create the viewholder at onCreateViewHolder
+        //because to create the right viewholder, it requires 2 argument,
+        //          1 is when you inflate the view,
+        //          2 is the function (onItemClickedFun) which has adapterposition stored as parameter
+        //since adapterposition and the index of element in "list" are the same, we just simply use adapterposition as index
+        // like list[adapterposition]
+        // notice that the parameter inside a lambda expression can also be written as 'it'
+        // so  list[it] simply means list[adapterposition], why? because adapterposition was kept as parameter :) <3<3
+        init {
+            view.setOnClickListener {
+                onItemClicked_fun(absoluteAdapterPosition)
+            }
 
+        }
     }
+    
+
 
 }
