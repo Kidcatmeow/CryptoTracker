@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 
 class rvCoinAdapter(val context: Activity, val list:ArrayList<Coin>,var onCoinClicked : (Coin)->Unit) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+
     //STEP: 2
     //we check which ItemViewType was passed by function 'getItemViewType'
     //if left --> create viewHolderLeft
@@ -27,18 +28,12 @@ class rvCoinAdapter(val context: Activity, val list:ArrayList<Coin>,var onCoinCl
     //After this, we move to onBindViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-
-
-
         return when (viewType) {
-            R.layout.rvcoin_viewholder_right -> ViewHolderRight(inflater.inflate(viewType, parent, false),{positionOfCoin->
+            R.layout.rvcoin_viewholder_right -> ViewHolderRight(inflater.inflate(viewType, parent, false)) { positionOfCoin ->
                 onCoinClicked(list[positionOfCoin])
-            })
-
-
+            }
             R.layout.rvcoin_viewholder_left -> ViewHolderLeft(inflater.inflate(viewType, parent, false))
-
-            else -> throw IllegalArgumentException("Unsupported layout") // in case populated with a model we don't know how to display.
+            else -> throw IllegalArgumentException("Unsupported layout")
         }
     }
 
@@ -46,11 +41,9 @@ class rvCoinAdapter(val context: Activity, val list:ArrayList<Coin>,var onCoinCl
 
     //STEP: 3
     //we check which viewHolder was created
-    //if right we bind something
-    //if left we bind the other thing
+    //if right we bind the views required for the right viewHolder
+    //if left we bind the views required for the left viewHolder
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-
-
         when (holder) {
             is ViewHolderRight -> {
                 if (list[position].iconUrl.endsWith(".png", true)) {
@@ -95,8 +88,8 @@ class rvCoinAdapter(val context: Activity, val list:ArrayList<Coin>,var onCoinCl
     //After this, we go to onCreateViewHolder
     override fun getItemViewType(position: Int): Int {
         //we do position + 1 because position starts at 0
-        var lol = position+1
-        return when (lol%5==0 && lol!=0) {
+        val viewPosition = position+1
+        return when (viewPosition%5==0 && viewPosition!=0) {
             true -> {
                 R.layout.rvcoin_viewholder_right
             }
@@ -133,7 +126,7 @@ class rvCoinAdapter(val context: Activity, val list:ArrayList<Coin>,var onCoinCl
         //since adapterposition and the index of element in "list" are the same, we just simply use adapterposition as index
         // like list[adapterposition]
         // notice that the parameter inside a lambda expression can also be written as 'it'
-        // so  list[it] simply means list[adapterposition], why? because adapterposition was kept as parameter :) <3<3
+        // so  list[it] simply means list[adapterposition], why? because adapterposition was kept as parameter
         init {
             view.setOnClickListener {
                 onItemClicked_fun(absoluteAdapterPosition)

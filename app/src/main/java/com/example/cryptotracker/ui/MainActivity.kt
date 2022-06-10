@@ -30,21 +30,24 @@ import kotlin.collections.ArrayList
 class MainActivity : AppCompatActivity() {
 
     companion object {
-
+        //create a list of coins to store the data
         val list = ArrayList<Coin>()
         fun callVolley(context:Context) {
             val url = "https://api.coinranking.com/v2/coins"
+
+            // Formulate the request and handle the response.
             val request = JsonObjectRequest(
                 Request.Method.GET, url, null,
                 { response ->
                     val data = response.getJSONObject("data")
                     val data_coin = data.getJSONArray("coins")
-                    //coins --> Object[BTC,ETH,BNB,USDT]
-                    //val name = BTC.name
-                    //val symbol = BTC.symbol
-                    //val icon = BTC.iconUrl
-                    //val website =BTC.coinrankingUrl
-                    //so that means, each index contains a 'coins' object
+                    /*coins --> Object[BTC,ETH,BNB,USDT]
+                    val name = BTC.name
+                    val symbol = BTC.symbol
+                    val icon = BTC.iconUrl
+                    val website =BTC.coinrankingUrl
+                    so that means, each index contains a 'coins' object */
+
                     for (i in 0 until data_coin.length()) {
                         //Access the coin object one by one and get their attributes
                         val jsonObj = data_coin.getJSONObject(i)
@@ -53,30 +56,36 @@ class MainActivity : AppCompatActivity() {
                         val iconUrl = jsonObj.getString("iconUrl")
                         val coinrankingUrl = jsonObj.getString("coinrankingUrl")
                         val rank = jsonObj.getInt("rank")
+                        //input all attributes into a data variable
                         val data = Coin(name, symbol, iconUrl, coinrankingUrl, rank)
+                        //store that data into the list
                         list.add(data)
                     }
-
-                    Log.i("LOLActivity", list.toString())
+                    //check if volley successfully get the list of coin through logcat
+                    Log.i("Activity", list.toString())
                 },
-                { error ->
-                    Log.i("LOLActivity", error.toString())
+                { error -> // Handle error
+                    Log.i("Activity", error.toString())
                     Toast.makeText(context, "Something went wrong!!", Toast.LENGTH_SHORT).show()
                 })
-            request.retryPolicy=DefaultRetryPolicy(DefaultRetryPolicy.DEFAULT_TIMEOUT_MS,0,1f)
+
+
+            //Volley request policy , only one time request to avoid duplicate transaction
+            request.retryPolicy=DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS, // By default, Volley sets all socket and connection timeouts to 5 seconds for all requests.
+                0, //0 means no retry
+                1f)
+
+            // Add the request to the RequestQueue.
             VolleySingleton.getInstance(context).addToRequestQueue(request)
         }
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val rvCoinList = findViewById<View>(R.id.rvCoinList) as RecyclerView
-        rvCoinList.setHasFixedSize(true)
         rvCoinList.layoutManager = LinearLayoutManager(this)
         val adapter = rvCoinAdapter(this,list){
             coin->
@@ -86,10 +95,6 @@ class MainActivity : AppCompatActivity() {
 
         }
         rvCoinList.adapter = adapter
-
-
-
-
     }
     
 
